@@ -37,6 +37,4 @@ steps:
     ConnectionType: 'AzureRM'
     azureSubscription: 'Free Trial(c1608b2f-39c1-4125-b2ae-39eface64ab8)'
     appType: 'webApp'
-    WebAppName: 'Upload'
-    VirtualApplication: 'Upload'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
