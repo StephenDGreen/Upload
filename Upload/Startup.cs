@@ -12,6 +12,7 @@ using Upload.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Upload.Filters;
 
 namespace Upload
 {
@@ -30,7 +31,26 @@ namespace Upload
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("IdentityConnection")));
-            services.AddRazorPages();
+            #region snippet_AddRazorPages
+            services.AddRazorPages()
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions
+                        .AddPageApplicationModelConvention("/FileUpload",
+                            model =>
+                            {
+                                model.Filters.Add(
+                                    new GenerateAntiforgeryTokenCookieAttribute());
+                                model.Filters.Add(
+                                    new DisableFormValueModelBindingAttribute());
+                            });
+                    options.Conventions
+                        .AuthorizePage("/FileUpload");
+                    options.Conventions
+                        .AuthorizePage("/FileList");
+                });
+            services.AddDbContext<UploadContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
