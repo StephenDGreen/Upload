@@ -49,7 +49,8 @@ namespace Upload
                     options.Conventions
                         .AuthorizePage("/FileList");
                 });
-            services.AddDbContext<UploadContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+            services.AddDbContext<UploadContext>(options => options.UseSqlServer(
+                    Configuration.GetConnectionString("UploadConnection")));
             #endregion
         }
 
